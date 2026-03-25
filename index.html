@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>旅行酒窩</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --green-dark: #3d6b4f;
     --green-mid: #5a8c6a;
-    --green-light: #e8f0e9;
-    --green-pale: #f2f6f2;
-    --cream: #faf8f3;
+    --green-light: #e2ede4;
+    --green-pale: #f0f5f0;
+    --cream: #f7f4ef;
     --card-bg: #ffffff;
     --text-primary: #2c3e2d;
     --text-secondary: #6b7c6d;
@@ -22,114 +22,527 @@
     --dot-blue: #4a7fc1;
     --dot-purple: #8b6bb1;
     --dot-green: #4a9a6a;
+    --shadow: 0 2px 12px rgba(61,107,79,0.10);
+    --shadow-card: 0 1px 6px rgba(61,107,79,0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { font-family: 'Noto Sans TC', sans-serif; background: #e8ede8; display: flex; justify-content: center; min-height: 100vh; }
-  .phone { width: 100%; max-width: 390px; min-height: 100vh; background: var(--cream); display: flex; flex-direction: column; position: relative; }
+  body {
+    font-family: 'M PLUS Rounded 1c', 'Noto Sans TC', sans-serif;
+    background: #dde8de;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .phone {
+    width: 100%;
+    max-width: 390px;
+    min-height: 100vh;
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
 
-  /* Header */
-  .header { background: var(--cream); padding: 48px 16px 12px; border-bottom: 1px solid var(--border); }
-  .header-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2px; }
-  .header-title { font-size: 17px; font-weight: 700; color: var(--text-primary); flex: 1; padding-right: 8px; cursor: pointer; }
-  .header-title.edit-mode { background: #fff; border: 1.5px solid var(--green-mid); border-radius: 8px; padding: 4px 8px; font-size: 15px; outline: none; width: 100%; }
-  .header-icons { display: flex; gap: 14px; align-items: center; flex-shrink: 0; }
-  .header-icons svg { width: 20px; height: 20px; color: var(--text-secondary); }
-  .header-date-row { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
-  .header-date { font-size: 12px; color: var(--text-secondary); background: #fff9c4; display: inline-block; padding: 1px 7px; border-radius: 4px; cursor: pointer; }
-  .header-date.edit-mode { background: #fff; border: 1.5px solid var(--green-mid); border-radius: 6px; padding: 2px 6px; font-size: 12px; outline: none; }
-  .sync-badge { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--green-mid); }
-  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-mid); }
+  /* ── Header ── */
+  .header {
+    background: var(--cream);
+    padding: 50px 18px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .back-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 6px;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .header-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    flex: 1;
+    padding-right: 8px;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+  .header-title.edit-mode {
+    background: #fff;
+    border: 1.5px solid var(--green-mid);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+  }
+  .header-icons {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .header-icons svg {
+    width: 22px;
+    height: 22px;
+    color: var(--text-secondary);
+  }
+  .header-date-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 36px;
+  }
+  .header-date {
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: #fff9c4;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .header-date.edit-mode {
+    background: #fff;
+    border: 1.5px solid var(--green-mid);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 13px;
+    outline: none;
+  }
+  .sync-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--green-mid);
+    font-weight: 500;
+  }
+  .sync-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green-mid);
+  }
 
-  /* Weather */
-  .weather-card { margin: 12px 12px 0; background: var(--green-light); border-radius: 14px; padding: 12px 14px; border: 1px solid #c8dcc9; }
-  .weather-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .weather-left { display: flex; align-items: center; gap: 10px; }
-  .weather-icon { font-size: 26px; }
-  .weather-day { font-size: 14px; font-weight: 700; color: var(--text-primary); }
-  .weather-date { font-size: 11px; color: var(--text-secondary); }
+  /* ── Weather Card ── */
+  .weather-card {
+    margin: 14px 14px 0;
+    background: var(--green-light);
+    border-radius: 18px;
+    padding: 14px 16px;
+    border: 1px solid #c4d9c8;
+    box-shadow: var(--shadow-card);
+  }
+  .weather-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .weather-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .weather-icon { font-size: 36px; line-height: 1; }
+  .weather-day {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+  }
+  .weather-date {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 1px;
+  }
   .weather-right { text-align: right; }
-  .weather-desc { font-size: 12px; color: var(--text-secondary); }
-  .weather-temp { font-size: 13px; font-weight: 500; color: var(--text-primary); }
-  .weather-bottom { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .weather-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-secondary); }
-  .weather-item svg { width: 13px; height: 13px; }
-  .w-edit { background: none; border: 1.5px solid var(--green-mid); border-radius: 6px; padding: 1px 6px; font-size: 11px; font-family: inherit; color: var(--green-dark); outline: none; width: 100%; }
+  .weather-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .weather-temp {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 2px;
+  }
+  .weather-bottom {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .weather-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .weather-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .w-edit {
+    background: none;
+    border: 1.5px solid var(--green-mid);
+    border-radius: 6px;
+    padding: 1px 6px;
+    font-size: 12px;
+    font-family: inherit;
+    color: var(--green-dark);
+    outline: none;
+    width: 100%;
+  }
 
-  /* Day Tabs */
-  .day-tabs-wrap { padding: 10px 12px 0; overflow-x: auto; scrollbar-width: none; }
+  /* ── Day Tabs ── */
+  .day-tabs-wrap {
+    padding: 12px 14px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
   .day-tabs-wrap::-webkit-scrollbar { display: none; }
-  .day-tabs { display: flex; gap: 6px; min-width: max-content; }
-  .day-tab { padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-secondary); white-space: nowrap; transition: all 0.15s; text-align: center; }
-  .day-tab .tab-label { font-weight: 500; }
-  .day-tab .tab-date { font-size: 11px; opacity: 0.8; }
-  .day-tab.active { background: var(--green-dark); border-color: var(--green-dark); color: white; }
-  .add-day-tab { padding: 6px 14px; border-radius: 20px; font-size: 18px; cursor: pointer; border: 1.5px dashed var(--green-mid); background: none; color: var(--green-mid); display: none; line-height: 1; }
+  .day-tabs { display: flex; gap: 8px; min-width: max-content; }
+  .day-tab {
+    padding: 7px 14px;
+    border-radius: 22px;
+    font-size: 13px;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    transition: all 0.15s;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+  }
+  .day-tab .tab-label { font-weight: 700; letter-spacing: 0.2px; }
+  .day-tab .tab-date { font-size: 12px; opacity: 0.8; margin-top: 1px; }
+  .day-tab.active {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    color: white;
+    box-shadow: 0 3px 10px rgba(61,107,79,0.30);
+  }
+  .add-day-tab {
+    padding: 7px 16px;
+    border-radius: 22px;
+    font-size: 20px;
+    cursor: pointer;
+    border: 2px dashed var(--green-mid);
+    background: none;
+    color: var(--green-mid);
+    display: none;
+    line-height: 1;
+    align-items: center;
+  }
 
-  /* Lock Bar */
-  .lock-bar { margin: 10px 12px 0; background: #f0f4f0; border-radius: 10px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); }
-  .lock-left { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
-  .lock-left svg { width: 14px; height: 14px; }
-  .unlock-btn { background: var(--green-dark); color: white; border: none; border-radius: 8px; padding: 5px 12px; font-size: 12px; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-  .unlock-btn.active { background: #c0392b; }
-  .save-hint { font-size: 11px; color: var(--green-mid); display: none; transition: opacity 0.3s; }
+  /* ── Lock Bar ── */
+  .lock-bar {
+    margin: 12px 14px 0;
+    background: #f0f4f0;
+    border-radius: 12px;
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--border);
+  }
+  .lock-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .lock-left svg { width: 15px; height: 15px; }
+  .unlock-btn {
+    background: var(--green-dark);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 2px 8px rgba(61,107,79,0.25);
+  }
+  .unlock-btn.active { background: #c0392b; box-shadow: 0 2px 8px rgba(192,57,43,0.25); }
+  .save-hint { font-size: 12px; color: var(--green-mid); display: none; font-weight: 500; }
 
-  /* Timeline */
-  .timeline { flex: 1; overflow-y: auto; padding: 10px 12px 100px; scrollbar-width: none; }
+  /* ── Timeline ── */
+  .timeline {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px 110px;
+    scrollbar-width: none;
+  }
   .timeline::-webkit-scrollbar { display: none; }
-  .tl-row { display: flex; align-items: flex-start; margin-bottom: 4px; position: relative; }
-  .tl-left { display: flex; flex-direction: column; align-items: center; width: 54px; flex-shrink: 0; padding-top: 14px; }
-  .tl-time { font-size: 12px; font-weight: 500; color: var(--text-secondary); white-space: nowrap; }
-  .tl-dot-outer { width: 10px; height: 10px; border-radius: 50%; border: 2px solid white; margin-top: 16px; flex-shrink: 0; z-index: 1; }
-  .tl-vline { width: 2px; background: var(--border); flex: 1; min-height: 20px; }
-  .tl-card { flex: 1; background: var(--card-bg); border-radius: 12px; padding: 10px 12px; margin: 6px 0 6px 8px; border: 1px solid var(--border); cursor: pointer; transition: background 0.15s; }
+  .tl-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .tl-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 56px;
+    flex-shrink: 0;
+    padding-top: 16px;
+  }
+  .tl-time {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+  .tl-dot-outer {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2.5px solid white;
+    margin-top: 16px;
+    flex-shrink: 0;
+    z-index: 1;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  .tl-vline {
+    width: 2px;
+    background: var(--border);
+    flex: 1;
+    min-height: 20px;
+  }
+  .tl-card {
+    flex: 1;
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 11px 14px;
+    margin: 6px 0 6px 10px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+    box-shadow: var(--shadow-card);
+  }
   .tl-card:active { background: var(--green-pale); }
-  .tl-card-top { display: flex; align-items: center; justify-content: space-between; }
-  .tl-card-name { font-size: 14px; font-weight: 500; color: var(--text-primary); flex: 1; }
-  .tl-chevron { width: 16px; height: 16px; color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; }
+  .tl-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tl-card-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    flex: 1;
+    letter-spacing: 0.2px;
+  }
+  .tl-chevron {
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
   .tl-chevron.open { transform: rotate(180deg); }
-  .tl-detail { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+  .tl-detail {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
   .tl-detail.show { display: block; }
-  .tl-detail-note { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.5; }
-  .map-btn { display: flex; align-items: center; justify-content: space-between; background: var(--green-pale); border-radius: 8px; padding: 8px 10px; border: 1px solid var(--border); }
-  .map-btn-left { display: flex; align-items: center; gap: 6px; }
-  .map-btn-left svg { width: 14px; height: 14px; color: #e05c5c; }
+  .tl-detail-note {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+  .map-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--green-pale);
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+  }
+  .map-btn-left { display: flex; align-items: center; gap: 7px; }
+  .map-btn-left svg { width: 15px; height: 15px; color: #e05c5c; }
   .map-btn-text { font-size: 12px; color: var(--text-secondary); }
-  .map-btn-name { font-size: 12px; color: var(--text-primary); font-weight: 500; }
-  .map-open { background: var(--green-dark); color: white; border: none; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 3px; }
+  .map-btn-name { font-size: 13px; color: var(--text-primary); font-weight: 700; }
+  .map-open {
+    background: var(--green-dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
 
-  /* Edit mode styles */
-  .edit-field { border: 1.5px solid var(--green-mid); border-radius: 8px; padding: 4px 8px; font-size: 13px; font-family: inherit; background: #fff; outline: none; color: var(--text-primary); width: 100%; }
-  .edit-field-time { width: 52px; font-size: 12px; text-align: center; border: 1.5px solid var(--green-mid); border-radius: 6px; padding: 3px 4px; font-family: inherit; background: #fff; outline: none; color: var(--text-secondary); }
-  .edit-actions { display: flex; gap: 6px; margin-top: 8px; }
-  .btn-del { background: #fde8e8; color: #c0392b; border: none; border-radius: 6px; padding: 5px 10px; font-size: 11px; font-family: inherit; cursor: pointer; }
-  .btn-add { width: 100%; margin: 6px 0 6px 8px; background: none; border: 1.5px dashed var(--green-mid); border-radius: 12px; padding: 10px; font-size: 13px; color: var(--green-mid); font-family: inherit; cursor: pointer; display: none; }
+  /* ── Edit styles ── */
+  .edit-field {
+    border: 1.5px solid var(--green-mid);
+    border-radius: 8px;
+    padding: 5px 9px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fff;
+    outline: none;
+    color: var(--text-primary);
+    width: 100%;
+  }
+  .edit-field-time {
+    width: 54px;
+    font-size: 13px;
+    text-align: center;
+    border: 1.5px solid var(--green-mid);
+    border-radius: 7px;
+    padding: 3px 4px;
+    font-family: inherit;
+    background: #fff;
+    outline: none;
+    color: var(--text-secondary);
+    font-weight: 700;
+  }
+  .edit-actions { display: flex; gap: 6px; margin-top: 9px; }
+  .btn-del {
+    background: #fde8e8;
+    color: #c0392b;
+    border: none;
+    border-radius: 7px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-add {
+    width: 100%;
+    margin: 6px 0 6px 10px;
+    background: none;
+    border: 2px dashed var(--green-mid);
+    border-radius: 14px;
+    padding: 11px;
+    font-size: 14px;
+    color: var(--green-mid);
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    display: none;
+  }
   .btn-add:active { background: var(--green-pale); }
 
-  /* Day edit controls */
-  .day-edit-bar { margin: 8px 12px 0; display: none; background: #fff; border-radius: 10px; padding: 8px 12px; border: 1px solid var(--border); gap: 8px; }
+  /* ── Day edit bar ── */
+  .day-edit-bar {
+    margin: 10px 14px 0;
+    display: none;
+    background: #fff;
+    border-radius: 12px;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    gap: 8px;
+  }
   .day-edit-bar.show { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .day-edit-bar label { font-size: 11px; color: var(--text-secondary); }
-  .day-del-btn { background: #fde8e8; color: #c0392b; border: none; border-radius: 6px; padding: 5px 10px; font-size: 11px; font-family: inherit; cursor: pointer; margin-left: auto; }
+  .day-edit-bar label { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+  .day-del-btn {
+    background: #fde8e8;
+    color: #c0392b;
+    border: none;
+    border-radius: 7px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: auto;
+  }
 
-  /* Bottom Nav */
-  .bottom-nav { position: sticky; bottom: 0; background: var(--card-bg); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 8px 0 20px; z-index: 10; }
-  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 4px 16px; border-radius: 10px; }
-  .nav-item svg { width: 22px; height: 22px; color: var(--text-muted); }
+  /* ── Bottom Nav ── */
+  .bottom-nav {
+    position: sticky;
+    bottom: 0;
+    background: var(--card-bg);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 22px;
+    z-index: 10;
+    box-shadow: 0 -2px 16px rgba(61,107,79,0.10);
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    padding: 4px 18px;
+    border-radius: 12px;
+  }
+  .nav-item svg { width: 24px; height: 24px; color: var(--text-muted); }
   .nav-item.active svg { color: var(--green-dark); }
-  .nav-item span { font-size: 10px; color: var(--text-muted); }
-  .nav-item.active span { color: var(--green-dark); font-weight: 500; }
+  .nav-item span { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+  .nav-item.active span { color: var(--green-dark); font-weight: 700; }
 
-  /* FAB */
-  .fab { position: absolute; bottom: 80px; right: 16px; background: var(--green-dark); color: white; width: 48px; height: 48px; border-radius: 50%; display: none; align-items: center; justify-content: center; border: none; cursor: pointer; font-size: 24px; z-index: 9; }
+  /* ── FAB ── */
+  .fab {
+    position: absolute;
+    bottom: 85px;
+    right: 18px;
+    background: var(--green-dark);
+    color: white;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    font-size: 26px;
+    z-index: 9;
+    box-shadow: 0 4px 14px rgba(61,107,79,0.35);
+  }
   .fab.show { display: flex; }
 
+  /* ── Dot colors ── */
   .dot-red { background: var(--dot-red); }
   .dot-orange { background: var(--dot-orange); }
   .dot-blue { background: var(--dot-blue); }
   .dot-purple { background: var(--dot-purple); }
   .dot-green { background: var(--dot-green); }
-  .dot-colors { display: flex; gap: 4px; margin-top: 6px; }
-  .dot-pick { width: 14px; height: 14px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+  .dot-colors { display: flex; gap: 6px; margin-top: 7px; }
+  .dot-pick {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
   .dot-pick.selected { border-color: #333; }
 </style>
 </head>
@@ -139,12 +552,15 @@
   <!-- Header -->
   <div class="header">
     <div class="header-top">
+      <div class="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
       <div style="flex:1;padding-right:8px;">
         <div id="tripTitleDisplay" class="header-title" onclick="editTripTitle()">載入中...</div>
         <input id="tripTitleInput" class="header-title edit-mode" style="display:none;" onblur="saveTripTitle()" onkeydown="if(event.key==='Enter')this.blur()">
       </div>
       <div class="header-icons">
-        <div class="sync-badge"><div class="sync-dot"></div><span id="syncStatus">同步中</span></div>
+        <div class="sync-badge"><div class="sync-dot"></div><span id="syncStatus">已同步</span></div>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -176,7 +592,7 @@
     <div style="display:flex;align-items:center;gap:8px;">
       <span class="save-hint" id="saveHint">✓ 已儲存</span>
       <button class="unlock-btn" id="unlockBtn" onclick="toggleEditMode()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
         解鎖編輯
       </button>
     </div>
@@ -191,7 +607,7 @@
   <!-- Bottom Nav -->
   <div class="bottom-nav">
     <div class="nav-item active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       <span>行程</span>
     </div>
     <div class="nav-item">
@@ -199,21 +615,86 @@
       <span>地圖</span>
     </div>
     <div class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
       <span>備忘</span>
     </div>
     <div class="nav-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span>成員</span>
     </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>預算</span>
+    </div>
   </div>
 </div>
 
 <script>
-// --- API 設定 ---
-const API_URL = "https://script.google.com/macros/s/AKfycbz9xWsHCmg5h09CL2t-Bs9HFn6cSREggFYe9GY82bv7IDjLyqBHkjaau5neGJo5DX20IA/exec"; 
+const API_URL = "https://script.google.com/macros/s/AKfycbz9xWsHCmg5h09CL2t-Bs9HFn6cSREggFYe9GY82bv7IDjLyqBHkjaau5neGJo5DX20IA/exec";
 
 const DOT_COLORS = ['dot-blue','dot-orange','dot-red','dot-purple','dot-green'];
+
+// ── 城市名稱對照表 (中文/日文 → 英文，確保 geocoding 成功) ──
+const CITY_ALIAS = {
+  // 台灣城市
+  '台北':'Taipei','臺北':'Taipei','台北市':'Taipei',
+  '高雄':'Kaohsiung','高雄市':'Kaohsiung',
+  '台中':'Taichung','臺中':'Taichung','台中市':'Taichung',
+  '台南':'Tainan','臺南':'Tainan','台南市':'Tainan',
+  '新北':'New Taipei','新北市':'New Taipei',
+  '桃園':'Taoyuan','桃園市':'Taoyuan',
+  '基隆':'Keelung',
+  '新竹':'Hsinchu',
+  '嘉義':'Chiayi',
+  '花蓮':'Hualien',
+  '台東':'Taitung','臺東':'Taitung',
+  // 日本城市
+  '東京':'Tokyo','とうきょう':'Tokyo',
+  '大阪':'Osaka','おおさか':'Osaka',
+  '京都':'Kyoto','きょうと':'Kyoto',
+  '廣島':'Hiroshima','広島':'Hiroshima',
+  '岡山':'Okayama','おかやま':'Okayama',
+  '神戶':'Kobe','神户':'Kobe','神奈川':'Kanagawa',
+  '橫濱':'Yokohama','横浜':'Yokohama',
+  '名古屋':'Nagoya',
+  '福岡':'Fukuoka',
+  '札幌':'Sapporo',
+  '仙台':'Sendai',
+  '那霸':'Naha','沖繩':'Okinawa','冲绳':'Okinawa',
+  '奈良':'Nara',
+  '金澤':'Kanazawa','金沢':'Kanazawa',
+  '長崎':'Nagasaki',
+  '熊本':'Kumamoto',
+  '鹿兒島':'Kagoshima','鹿児島':'Kagoshima',
+  '尾道':'Onomichi',
+  '倉敷':'Kurashiki',
+  '姬路':'Himeji','姫路':'Himeji',
+  '白濱':'Shirahama','白浜':'Shirahama',
+  '輕井澤':'Karuizawa','軽井沢':'Karuizawa',
+  '日光':'Nikko',
+  '箱根':'Hakone',
+  '鎌倉':'Kamakura',
+  '富士山':'Fujisan',
+  '長野':'Nagano',
+  '松本':'Matsumoto',
+  '高山':'Takayama',
+  '下呂':'Gero',
+  '別府':'Beppu',
+  '由布院':'Yufuin',
+  '宮島':'Miyajima',
+  // 中國城市
+  '北京':'Beijing','上海':'Shanghai','香港':'Hong Kong',
+  // 韓國城市
+  '首爾':'Seoul','釜山':'Busan',
+  // 東南亞
+  '曼谷':'Bangkok','新加坡':'Singapore','吉隆坡':'Kuala Lumpur',
+  '峇里':'Bali','巴厘':'Bali','河內':'Hanoi','胡志明':'Ho Chi Minh City',
+};
+
+function resolveCity(city) {
+  return CITY_ALIAS[city.trim()] || city;
+}
+
 const DEFAULT_DATA = {
   title: '日本岡山廣島親子自駕行',
   dateRange: '2026/04/20 - 2026/04/27',
@@ -237,47 +718,52 @@ const DEFAULT_DATA = {
         {time:'16:30',name:'廣島和平紀念資料館',dot:'dot-orange',note:'參觀約1.5小時，建議帶紙巾',map:'廣島和平紀念資料館'},
         {time:'18:00',name:'廣島原爆圓頂',dot:'dot-red',note:'免費參觀，約半小時',map:'原子彈爆炸圓頂屋'},
       ]},
+    { day:3, date:'4/22', city:'尾道', weather:{icon:'🌧️',desc:'陣雨',high:22,low:15,rain:75,wind:'15 km/h',outfit:'薄長袖＋舒適長褲'},
+      items:[
+        {time:'10:30',name:'耕三寺博物館',dot:'dot-orange',note:'又稱「西日本日光」，大理石庭園非常壯觀',map:'耕三寺博物館 尾道'},
+        {time:'13:30',name:'パーキングとよひ 停車場',dot:'dot-blue',note:'尾道市區停車，步行即可到達商店街',map:'パーキングとよひ 尾道'},
+        {time:'13:30',name:'廣島尾道商店街',dot:'dot-blue',note:'充滿昭和風情的老街，有許多獨立小店和咖啡廳',map:'尾道商店街'},
+        {time:'14:00',name:'パン屋航路',dot:'dot-orange',note:'尾道著名麵包店，必嚐菠蘿麵包',map:'パン屋航路 尾道'},
+        {time:'14:00',name:'桂馬蒲鉾商店',dot:'dot-orange',note:'創業百年魚板老店，可現場試吃購買',map:'桂馬蒲鉾商店 尾道'},
+        {time:'14:00',name:'HIBI COFFEE',dot:'dot-orange',note:'尾道斜坡上的文青咖啡廳，景色絕佳',map:'HIBI COFFEE 尾道'},
+      ]},
   ]
 };
 
 let data, currentDay = 0, editMode = false;
-let sessionPassword = ""; 
-let saveTimeout; 
+let sessionPassword = "";
+let saveTimeout;
 
-// --- 雲端載入邏輯 ---
+// ── 雲端載入 ──
 async function load() {
   try {
     const res = await fetch(API_URL);
     const text = await res.text();
-    // 檢查雲端資料庫是不是空的
     if (text && text !== "{}") {
       data = JSON.parse(text);
-      localStorage.setItem('travelData', JSON.stringify(data)); 
-      document.getElementById('syncStatus').textContent = "雲端已載入";
+      localStorage.setItem('travelData', JSON.stringify(data));
+      document.getElementById('syncStatus').textContent = "已同步";
     } else {
-      // 雲端如果沒有資料，載入預設資料並幫忙上傳一份
       data = JSON.parse(JSON.stringify(DEFAULT_DATA));
       document.getElementById('syncStatus').textContent = "初次載入";
     }
   } catch (e) {
-    console.error("雲端載入失敗，使用本地快取", e);
     const saved = localStorage.getItem('travelData');
     data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
-    document.getElementById('syncStatus').textContent = "離線模式";
+    document.getElementById('syncStatus').textContent = "離線";
     document.querySelector('.sync-dot').style.background = '#c0392b';
   }
   renderHeader();
   switchDay(0);
 }
 
-// --- 雲端寫入邏輯 ---
+// ── 雲端寫入 ──
 function save() {
   localStorage.setItem('travelData', JSON.stringify(data));
   const hint = document.getElementById('saveHint');
   hint.textContent = '⏳ 同步中...';
   hint.style.color = 'var(--dot-orange)';
   hint.style.display = 'inline';
-
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(async () => {
     try {
@@ -287,27 +773,28 @@ function save() {
         body: JSON.stringify({ password: sessionPassword, data: data })
       });
       const result = await res.json();
-      
       if (result.status === 'success') {
         hint.textContent = '✓ 已儲存雲端';
         hint.style.color = 'var(--green-mid)';
       } else {
         hint.textContent = '❌ ' + result.message;
         hint.style.color = '#c0392b';
-        if(editMode) toggleEditMode(); 
+        if (editMode) toggleEditMode();
       }
     } catch(e) {
       hint.textContent = '❌ 連線失敗(存於本機)';
       hint.style.color = '#c0392b';
     }
-    setTimeout(() => { if(!editMode) hint.style.display = 'none'; }, 3000);
-  }, 1500); 
+    setTimeout(() => { if (!editMode) hint.style.display = 'none'; }, 3000);
+  }, 1500);
 }
 
-// --- 自動抓取天氣 API 邏輯 ---
+// ── 自動抓取天氣（支援台日城市） ──
 async function autoFetchWeather(dayIndex) {
-  const city = data.days[dayIndex].city;
-  if (!city || city === '城市') return alert('請先輸入正確的城市名稱！');
+  const rawCity = data.days[dayIndex].city;
+  if (!rawCity || rawCity === '城市') return alert('請先輸入正確的城市名稱！');
+
+  const city = resolveCity(rawCity);
 
   const hint = document.getElementById('saveHint');
   hint.textContent = '🔄 抓取天氣中...';
@@ -315,75 +802,78 @@ async function autoFetchWeather(dayIndex) {
   hint.style.display = 'inline';
 
   try {
-    // 1. 透過 Geocoding API 將城市名稱轉為經緯度
-    const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=zh`);
+    // Step 1: Geocoding — 同時嘗試語言 en 以提高命中率
+    const geoRes = await fetch(
+      `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=5&language=en`
+    );
     const geoData = await geoRes.json();
-    
+
     if (!geoData.results || geoData.results.length === 0) {
-      alert(`找不到「${city}」的氣象資料，請嘗試輸入更準確的城市名（如：Tokyo, 高雄）。`);
+      alert(`找不到「${rawCity}」(${city}) 的氣象資料。\n請嘗試輸入英文城市名，如：Hiroshima、Kaohsiung`);
       hint.style.display = 'none';
       return;
     }
-    
-    const { latitude: lat, longitude: lon, timezone } = geoData.results[0];
-    const tz = timezone || 'Asia/Taipei';
 
-    // 2. 透過 Open-Meteo 取得未來 14 天的預報資料
-    const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&timezone=${tz}&forecast_days=14`);
+    // 優先選台灣或日本的結果
+    let loc = geoData.results.find(r => r.country_code === 'TW' || r.country_code === 'JP')
+           || geoData.results[0];
+
+    const { latitude: lat, longitude: lon, timezone } = loc;
+    const tz = timezone || 'Asia/Tokyo';
+
+    // Step 2: 天氣預報
+    const weatherRes = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&timezone=${tz}&forecast_days=16`
+    );
     const wData = await weatherRes.json();
 
-    // 3. 尋找對應日期
-    const dateParts = data.days[dayIndex].date.split('/');
-    const month = dateParts[0].padStart(2, '0');
-    const day = (dateParts[1] || '').padStart(2, '0');
-    const searchDateStr = `${month}-${day}`; 
-
-    let targetIdx = wData.daily.time.findIndex(t => t.endsWith(searchDateStr));
+    // Step 3: 找對應日期
+    const dateStr = data.days[dayIndex].date; // e.g. "4/24"
+    const parts = dateStr.split('/');
+    const mm = (parts[0] || '').padStart(2, '0');
+    const dd = (parts[1] || '').padStart(2, '0');
+    const searchSuffix = `-${mm}-${dd}`;
+    let targetIdx = wData.daily.time.findIndex(t => t.endsWith(searchSuffix));
 
     if (targetIdx === -1) {
-      targetIdx = 0; 
-      alert(`出發日期不在未來 14 天預報範圍內。\n已先為您填入「${city}」近期的氣候概況，建議出發前一週再更新一次！`);
+      targetIdx = 0;
+      alert(`日期不在 16 天預報範圍內，先填入近期概況，建議出發前一週再更新！`);
     }
 
-    // 4. 解析天氣代碼並轉換成 Emoji
+    // Step 4: 天氣代碼 → Emoji
     const wCode = wData.daily.weathercode[targetIdx];
     let icon = '⛅', desc = '多雲';
-    if (wCode === 0) { icon = '☀️'; desc = '晴朗'; }
-    else if (wCode >= 1 && wCode <= 3) { icon = '⛅'; desc = '晴時多雲'; }
-    else if (wCode === 45 || wCode === 48) { icon = '🌫️'; desc = '起霧'; }
-    else if (wCode >= 51 && wCode <= 67) { icon = '🌧️'; desc = '雨天'; }
-    else if (wCode >= 71 && wCode <= 77) { icon = '❄️'; desc = '下雪'; }
-    else if (wCode >= 80 && wCode <= 82) { icon = '🌦️'; desc = '陣雨'; }
-    else if (wCode >= 95) { icon = '⛈️'; desc = '雷陣雨'; }
+    if (wCode === 0)                          { icon = '☀️'; desc = '晴朗'; }
+    else if (wCode >= 1 && wCode <= 3)        { icon = '⛅'; desc = '晴時多雲'; }
+    else if (wCode === 45 || wCode === 48)    { icon = '🌫️'; desc = '起霧'; }
+    else if (wCode >= 51 && wCode <= 55)      { icon = '🌦️'; desc = '毛毛雨'; }
+    else if (wCode >= 61 && wCode <= 67)      { icon = '🌧️'; desc = '雨天'; }
+    else if (wCode >= 71 && wCode <= 77)      { icon = '❄️'; desc = '下雪'; }
+    else if (wCode >= 80 && wCode <= 82)      { icon = '🌦️'; desc = '陣雨'; }
+    else if (wCode >= 95)                     { icon = '⛈️'; desc = '雷陣雨'; }
 
-    // 5. 更新行程表的天氣物件
+    // Step 5: 更新
     const wObj = data.days[dayIndex].weather;
     wObj.icon = icon;
     wObj.desc = desc;
     wObj.high = Math.round(wData.daily.temperature_2m_max[targetIdx]);
-    wObj.low = Math.round(wData.daily.temperature_2m_min[targetIdx]);
+    wObj.low  = Math.round(wData.daily.temperature_2m_min[targetIdx]);
     wObj.rain = wData.daily.precipitation_probability_max[targetIdx] || 0;
     wObj.wind = Math.round(wData.daily.windspeed_10m_max[targetIdx]) + ' km/h';
 
-    // 產生穿搭建議
-    if (wObj.high >= 28) wObj.outfit = '短袖＋防曬';
+    if (wObj.high >= 28)      wObj.outfit = '短袖＋防曬';
     else if (wObj.high >= 22) wObj.outfit = '薄長袖＋輕薄外套';
     else if (wObj.high >= 15) wObj.outfit = '長袖＋防風外套';
-    else wObj.outfit = '發熱衣＋保暖羽絨';
+    else                       wObj.outfit = '發熱衣＋保暖羽絨';
 
-    // 6. 存檔到試算表並重新渲染
     save();
     buildWeather(data.days[dayIndex]);
-    
+
     hint.textContent = '✓ 天氣已更新';
     hint.style.color = 'var(--green-mid)';
-    setTimeout(() => { 
-      if(editMode) { 
-        hint.textContent = '🖊️ 編輯中'; 
-        hint.style.color = 'var(--text-secondary)'; 
-      } else { 
-        hint.style.display = 'none'; 
-      } 
+    setTimeout(() => {
+      if (editMode) { hint.textContent = '🖊️ 編輯中'; hint.style.color = 'var(--text-secondary)'; }
+      else { hint.style.display = 'none'; }
     }, 2000);
 
   } catch(e) {
@@ -393,17 +883,10 @@ async function autoFetchWeather(dayIndex) {
   }
 }
 
-/* ── UI 與切換邏輯 ── */
+// ── UI 渲染 ──
 function renderHeader() {
   document.getElementById('tripTitleDisplay').textContent = data.title;
   document.getElementById('tripDateDisplay').textContent = data.dateRange;
-  if (editMode) {
-    document.getElementById('tripTitleDisplay').style.cursor = 'text';
-    document.getElementById('tripDateDisplay').style.cursor = 'text';
-  } else {
-    document.getElementById('tripTitleDisplay').style.cursor = 'default';
-    document.getElementById('tripDateDisplay').style.cursor = 'default';
-  }
 }
 function editTripTitle() {
   if (!editMode) return;
@@ -414,7 +897,8 @@ function editTripTitle() {
 function saveTripTitle() {
   const i = document.getElementById('tripTitleInput');
   data.title = i.value || data.title;
-  document.getElementById('tripTitleDisplay').style.display='block'; i.style.display='none';
+  document.getElementById('tripTitleDisplay').style.display='block';
+  i.style.display='none';
   renderHeader(); save();
 }
 function editTripDate() {
@@ -426,17 +910,17 @@ function editTripDate() {
 function saveTripDate() {
   const i = document.getElementById('tripDateInput');
   data.dateRange = i.value || data.dateRange;
-  document.getElementById('tripDateDisplay').style.display='inline-block'; i.style.display='none';
+  document.getElementById('tripDateDisplay').style.display='inline-block';
+  i.style.display='none';
   renderHeader(); save();
 }
 
 function toggleEditMode() {
   const hint = document.getElementById('saveHint');
-  
   if (!editMode) {
     if (!sessionPassword) {
-      const pwd = prompt("請輸入編輯密碼：\n(若未設定請輸入您在 Apps Script 中綁定的密碼)");
-      if (!pwd) return; 
+      const pwd = prompt("請輸入編輯密碼：");
+      if (!pwd) return;
       sessionPassword = pwd;
     }
     editMode = true;
@@ -444,14 +928,12 @@ function toggleEditMode() {
     editMode = false;
     hint.style.display = 'none';
   }
-
   const btn = document.getElementById('unlockBtn');
   const txt = document.getElementById('lockText');
   const icon = document.getElementById('lockIcon');
   const fab = document.getElementById('fab');
   const addDayTab = document.getElementById('addDayTab');
   const dayEditBar = document.getElementById('dayEditBar');
-  
   if (editMode) {
     btn.classList.add('active'); btn.textContent = '🔒 鎖定';
     txt.textContent = '編輯模式 — 點擊可修改';
@@ -464,7 +946,7 @@ function toggleEditMode() {
     hint.style.display = 'inline';
   } else {
     btn.classList.remove('active');
-    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 解鎖編輯';
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 解鎖編輯';
     txt.textContent = '目前為瀏覽模式';
     fab.classList.remove('show');
     if (addDayTab) addDayTab.style.display = 'none';
@@ -480,29 +962,45 @@ function buildWeather(day) {
   document.getElementById('weatherCard').innerHTML = `
     <div class="weather-top">
       <div class="weather-left">
-        <div class="weather-icon">${editMode ? `<input class="w-edit" style="width:50px;font-size:22px;" value="${w.icon}" onchange="updateWeather(${day.day-1},'icon',this.value)" onclick="event.stopPropagation()">` : w.icon}</div>
+        <div class="weather-icon">${editMode
+          ? `<input class="w-edit" style="width:54px;font-size:24px;" value="${w.icon}" onchange="updateWeather(${day.day-1},'icon',this.value)" onclick="event.stopPropagation()">`
+          : w.icon}</div>
         <div>
-          <div class="weather-day">Day ${day.day} — ${editMode ? `<input class="w-edit" style="width:70px;" value="${day.city}" onchange="updateDayCity(${day.day-1},this.value)">` : day.city}</div>
-          <div class="weather-date">${editMode ? `<input class="w-edit" value="${day.date}" onchange="updateDayDate(${day.day-1},this.value)">` : day.date}</div>
+          <div class="weather-day">Day ${day.day} — ${editMode
+            ? `<input class="w-edit" style="width:72px;" value="${day.city}" onchange="updateDayCity(${day.day-1},this.value)">`
+            : day.city}</div>
+          <div class="weather-date">${editMode
+            ? `<input class="w-edit" value="${day.date}" onchange="updateDayDate(${day.day-1},this.value)">`
+            : day.date}</div>
         </div>
       </div>
       <div class="weather-right">
-        <div class="weather-desc">${editMode ? `<input class="w-edit" style="width:80px;" value="${w.desc}" onchange="updateWeather(${day.day-1},'desc',this.value)">` : w.desc}</div>
-        <div class="weather-temp">${editMode ? `<input class="w-edit" style="width:120px;" value="${w.high}° / ${w.low}°" onchange="parseTemp(${day.day-1},this.value)">` : `${w.high}° / ${w.low}°`}</div>
+        <div class="weather-desc">${editMode
+          ? `<input class="w-edit" style="width:82px;" value="${w.desc}" onchange="updateWeather(${day.day-1},'desc',this.value)">`
+          : w.desc}</div>
+        <div class="weather-temp">${editMode
+          ? `<input class="w-edit" style="width:120px;" value="${w.high}° / ${w.low}°" onchange="parseTemp(${day.day-1},this.value)">`
+          : `${w.high}° / ${w.low}°`}</div>
       </div>
     </div>
     <div class="weather-bottom">
       <div class="weather-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        ${editMode ? `<input class="w-edit" style="width:50px;" value="${w.wind}" onchange="updateWeather(${day.day-1},'wind',this.value)">` : w.wind}
+        ${editMode
+          ? `<input class="w-edit" style="width:55px;" value="${w.wind}" onchange="updateWeather(${day.day-1},'wind',this.value)">`
+          : w.wind}
       </div>
       <div class="weather-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="19" x2="8" y2="21"/><line x1="8" y1="13" x2="8" y2="15"/><line x1="16" y1="19" x2="16" y2="21"/><line x1="16" y1="13" x2="16" y2="15"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="12" y1="15" x2="12" y2="17"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>
-        ${editMode ? `<input class="w-edit" style="width:45px;" value="${w.rain}" onchange="updateWeather(${day.day-1},'rain',this.value)">` : w.rain}%
+        ${editMode
+          ? `<input class="w-edit" style="width:48px;" value="${w.rain}" onchange="updateWeather(${day.day-1},'rain',this.value)">`
+          : w.rain}%
       </div>
       <div class="weather-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
-        ${editMode ? `<input class="w-edit" style="width:130px;" value="${w.outfit}" onchange="updateWeather(${day.day-1},'outfit',this.value)">` : w.outfit}
+        ${editMode
+          ? `<input class="w-edit" style="width:130px;" value="${w.outfit}" onchange="updateWeather(${day.day-1},'outfit',this.value)">`
+          : w.outfit}
       </div>
     </div>`;
 }
@@ -521,7 +1019,8 @@ function buildTabs() {
     <div class="day-tab ${i===currentDay?'active':''}" onclick="switchDay(${i})">
       <div class="tab-label">Day ${d.day}</div>
       <div class="tab-date">${d.date}</div>
-    </div>`).join('') + `<div class="add-day-tab" id="addDayTab" onclick="addDay()" style="display:${editMode?'flex':'none'};align-items:center;">+</div>`;
+    </div>`).join('') +
+    `<div class="add-day-tab" id="addDayTab" onclick="addDay()" style="display:${editMode?'flex':'none'};align-items:center;">+</div>`;
 }
 
 function buildDayEditBar() {
@@ -529,13 +1028,11 @@ function buildDayEditBar() {
   if (!editMode) { bar.classList.remove('show'); return; }
   bar.classList.add('show');
   const d = data.days[currentDay];
-  
-  // 加上自動抓取天氣按鈕
   bar.innerHTML = `
     <label>日期</label>
     <input class="edit-field" style="width:65px;" value="${d.date}" onchange="updateDayDate(${currentDay},this.value)">
     <label>城市</label>
-    <input class="edit-field" style="width:65px;" value="${d.city}" onchange="updateDayCity(${currentDay},this.value)">
+    <input class="edit-field" style="width:75px;" value="${d.city}" onchange="updateDayCity(${currentDay},this.value)">
     <button class="unlock-btn" style="background:var(--dot-blue);" onclick="autoFetchWeather(${currentDay})">🔄 更新天氣</button>
     <button class="day-del-btn" onclick="deleteDay(${currentDay})">刪除此天</button>`;
 }
@@ -549,16 +1046,16 @@ function buildTimeline(day) {
           ? `<input class="edit-field-time" value="${item.time}" onchange="updateItem(${idx},'time',this.value)">`
           : `<div class="tl-time">${item.time}</div>`}
       </div>
-      <div style="display:flex;flex-direction:column;align-items:center;width:18px;flex-shrink:0;">
+      <div style="display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0;">
         <div class="tl-dot-outer ${item.dot}" style="margin-top:${editMode?'12':'16'}px;"></div>
         ${idx < day.items.length-1 ? '<div class="tl-vline" style="flex:1;min-height:30px;"></div>' : ''}
       </div>
       <div class="tl-card" onclick="toggleDetail(this,${idx})">
         <div class="tl-card-top">
           ${editMode
-            ? `<input class="edit-field" value="${item.name}" onclick="event.stopPropagation()" onchange="updateItem(${idx},'name',this.value)" style="flex:1;margin-right:6px;">`
+            ? `<input class="edit-field" value="${item.name}" onclick="event.stopPropagation()" onchange="updateItem(${idx},'name',this.value)" style="flex:1;margin-right:8px;">`
             : `<div class="tl-card-name">${item.name}</div>`}
-          <svg class="tl-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="tl-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="tl-detail" id="detail-${idx}">
           ${editMode ? `
@@ -566,7 +1063,7 @@ function buildTimeline(day) {
             <input class="edit-field" placeholder="地圖搜尋名稱" value="${item.map||''}" onclick="event.stopPropagation()" onchange="updateItem(${idx},'map',this.value)" style="margin-bottom:8px;">
             <div class="dot-colors">
               ${DOT_COLORS.map(dc=>`<div class="dot-pick ${dc} ${item.dot===dc?'selected':''}" onclick="event.stopPropagation();updateItem(${idx},'dot','${dc}');buildTimeline(data.days[currentDay]);"></div>`).join('')}
-              <span style="font-size:11px;color:var(--text-muted);margin-left:4px;">顏色</span>
+              <span style="font-size:12px;color:var(--text-muted);margin-left:4px;">顏色</span>
             </div>
             <div class="edit-actions">
               <button class="btn-del" onclick="event.stopPropagation();deleteItem(${idx})">🗑 刪除</button>
@@ -581,7 +1078,7 @@ function buildTimeline(day) {
                 <div><div class="map-btn-text">Google 地圖</div><div class="map-btn-name">${item.map||item.name}</div></div>
               </div>
               <button class="map-open" onclick="event.stopPropagation();window.open('https://maps.google.com/?q=${encodeURIComponent(item.map||item.name)}','_blank')">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 開啟
               </button>
             </div>
@@ -599,7 +1096,6 @@ function toggleDetail(card, idx) {
   detail.classList.toggle('show', !isOpen);
   chevron.classList.toggle('open', !isOpen);
 }
-
 function updateItem(idx, key, val) {
   data.days[currentDay].items[idx][key] = val;
   save();
@@ -626,8 +1122,13 @@ function addItemAt(idx) {
   }, 100);
 }
 function addDay() {
-  const last = data.days[data.days.length-1];
-  data.days.push({ day: data.days.length+1, date:'新日期', city:'城市', weather:{icon:'☀️',desc:'晴朗',high:25,low:18,rain:10,wind:'--',outfit:'自行填寫'}, items:[] });
+  data.days.push({
+    day: data.days.length+1,
+    date: '新日期',
+    city: '城市',
+    weather: { icon:'☀️', desc:'晴朗', high:25, low:18, rain:10, wind:'-- km/h', outfit:'自行填寫' },
+    items: []
+  });
   save(); switchDay(data.days.length-1);
 }
 function deleteDay(idx) {
@@ -638,7 +1139,6 @@ function deleteDay(idx) {
   currentDay = Math.min(currentDay, data.days.length-1);
   save(); switchDay(currentDay);
 }
-
 function switchDay(idx) {
   currentDay = idx;
   buildWeather(data.days[idx]);
