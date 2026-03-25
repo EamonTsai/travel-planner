@@ -136,6 +136,7 @@
 <body>
 <div class="phone" id="app">
 
+  <!-- Header -->
   <div class="header">
     <div class="header-top">
       <div style="flex:1;padding-right:8px;">
@@ -155,14 +156,18 @@
     </div>
   </div>
 
+  <!-- Weather Card -->
   <div class="weather-card" id="weatherCard"></div>
 
+  <!-- Day Tabs -->
   <div class="day-tabs-wrap">
     <div class="day-tabs" id="dayTabs"></div>
   </div>
 
+  <!-- Day Edit Bar -->
   <div class="day-edit-bar" id="dayEditBar"></div>
 
+  <!-- Lock Bar -->
   <div class="lock-bar">
     <div class="lock-left">
       <svg id="lockIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -177,10 +182,13 @@
     </div>
   </div>
 
+  <!-- Timeline -->
   <div class="timeline" id="timeline"></div>
 
+  <!-- FAB -->
   <button class="fab" id="fab" onclick="addItem()">+</button>
 
+  <!-- Bottom Nav -->
   <div class="bottom-nav">
     <div class="nav-item active">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -294,6 +302,95 @@ function save() {
     }
     setTimeout(() => { if(!editMode) hint.style.display = 'none'; }, 3000);
   }, 1500); 
+}
+
+// --- 自動抓取天氣 API 邏輯 ---
+async function autoFetchWeather(dayIndex) {
+  const city = data.days[dayIndex].city;
+  if (!city || city === '城市') return alert('請先輸入正確的城市名稱！');
+
+  const hint = document.getElementById('saveHint');
+  hint.textContent = '🔄 抓取天氣中...';
+  hint.style.color = 'var(--dot-blue)';
+  hint.style.display = 'inline';
+
+  try {
+    // 1. 透過 Geocoding API 將城市名稱轉為經緯度
+    const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=zh`);
+    const geoData = await geoRes.json();
+    
+    if (!geoData.results || geoData.results.length === 0) {
+      alert(`找不到「${city}」的氣象資料，請嘗試輸入更準確的城市名（如：Tokyo, 高雄）。`);
+      hint.style.display = 'none';
+      return;
+    }
+    
+    const { latitude: lat, longitude: lon, timezone } = geoData.results[0];
+    const tz = timezone || 'Asia/Taipei';
+
+    // 2. 透過 Open-Meteo 取得未來 14 天的預報資料
+    const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&timezone=${tz}&forecast_days=14`);
+    const wData = await weatherRes.json();
+
+    // 3. 尋找對應日期
+    const dateParts = data.days[dayIndex].date.split('/');
+    const month = dateParts[0].padStart(2, '0');
+    const day = (dateParts[1] || '').padStart(2, '0');
+    const searchDateStr = `${month}-${day}`; 
+
+    let targetIdx = wData.daily.time.findIndex(t => t.endsWith(searchDateStr));
+
+    if (targetIdx === -1) {
+      targetIdx = 0; 
+      alert(`出發日期不在未來 14 天預報範圍內。\n已先為您填入「${city}」近期的氣候概況，建議出發前一週再更新一次！`);
+    }
+
+    // 4. 解析天氣代碼並轉換成 Emoji
+    const wCode = wData.daily.weathercode[targetIdx];
+    let icon = '⛅', desc = '多雲';
+    if (wCode === 0) { icon = '☀️'; desc = '晴朗'; }
+    else if (wCode >= 1 && wCode <= 3) { icon = '⛅'; desc = '晴時多雲'; }
+    else if (wCode === 45 || wCode === 48) { icon = '🌫️'; desc = '起霧'; }
+    else if (wCode >= 51 && wCode <= 67) { icon = '🌧️'; desc = '雨天'; }
+    else if (wCode >= 71 && wCode <= 77) { icon = '❄️'; desc = '下雪'; }
+    else if (wCode >= 80 && wCode <= 82) { icon = '🌦️'; desc = '陣雨'; }
+    else if (wCode >= 95) { icon = '⛈️'; desc = '雷陣雨'; }
+
+    // 5. 更新行程表的天氣物件
+    const wObj = data.days[dayIndex].weather;
+    wObj.icon = icon;
+    wObj.desc = desc;
+    wObj.high = Math.round(wData.daily.temperature_2m_max[targetIdx]);
+    wObj.low = Math.round(wData.daily.temperature_2m_min[targetIdx]);
+    wObj.rain = wData.daily.precipitation_probability_max[targetIdx] || 0;
+    wObj.wind = Math.round(wData.daily.windspeed_10m_max[targetIdx]) + ' km/h';
+
+    // 產生穿搭建議
+    if (wObj.high >= 28) wObj.outfit = '短袖＋防曬';
+    else if (wObj.high >= 22) wObj.outfit = '薄長袖＋輕薄外套';
+    else if (wObj.high >= 15) wObj.outfit = '長袖＋防風外套';
+    else wObj.outfit = '發熱衣＋保暖羽絨';
+
+    // 6. 存檔到試算表並重新渲染
+    save();
+    buildWeather(data.days[dayIndex]);
+    
+    hint.textContent = '✓ 天氣已更新';
+    hint.style.color = 'var(--green-mid)';
+    setTimeout(() => { 
+      if(editMode) { 
+        hint.textContent = '🖊️ 編輯中'; 
+        hint.style.color = 'var(--text-secondary)'; 
+      } else { 
+        hint.style.display = 'none'; 
+      } 
+    }, 2000);
+
+  } catch(e) {
+    console.error(e);
+    alert('連線氣象站失敗，請確認網路狀態。');
+    hint.style.display = 'none';
+  }
 }
 
 /* ── UI 與切換邏輯 ── */
@@ -432,11 +529,14 @@ function buildDayEditBar() {
   if (!editMode) { bar.classList.remove('show'); return; }
   bar.classList.add('show');
   const d = data.days[currentDay];
+  
+  // 加上自動抓取天氣按鈕
   bar.innerHTML = `
     <label>日期</label>
-    <input class="edit-field" style="width:90px;" value="${d.date}" onchange="updateDayDate(${currentDay},this.value)">
+    <input class="edit-field" style="width:65px;" value="${d.date}" onchange="updateDayDate(${currentDay},this.value)">
     <label>城市</label>
-    <input class="edit-field" style="width:80px;" value="${d.city}" onchange="updateDayCity(${currentDay},this.value)">
+    <input class="edit-field" style="width:65px;" value="${d.city}" onchange="updateDayCity(${currentDay},this.value)">
+    <button class="unlock-btn" style="background:var(--dot-blue);" onclick="autoFetchWeather(${currentDay})">🔄 更新天氣</button>
     <button class="day-del-btn" onclick="deleteDay(${currentDay})">刪除此天</button>`;
 }
 
