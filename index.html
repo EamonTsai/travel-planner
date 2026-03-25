@@ -71,7 +71,7 @@
   .lock-left svg { width: 14px; height: 14px; }
   .unlock-btn { background: var(--green-dark); color: white; border: none; border-radius: 8px; padding: 5px 12px; font-size: 12px; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 4px; }
   .unlock-btn.active { background: #c0392b; }
-  .save-hint { font-size: 11px; color: var(--green-mid); display: none; }
+  .save-hint { font-size: 11px; color: var(--green-mid); display: none; transition: opacity 0.3s; }
 
   /* Timeline */
   .timeline { flex: 1; overflow-y: auto; padding: 10px 12px 100px; scrollbar-width: none; }
@@ -136,38 +136,33 @@
 <body>
 <div class="phone" id="app">
 
-  <!-- Header -->
   <div class="header">
     <div class="header-top">
       <div style="flex:1;padding-right:8px;">
-        <div id="tripTitleDisplay" class="header-title" onclick="editTripTitle()"></div>
+        <div id="tripTitleDisplay" class="header-title" onclick="editTripTitle()">載入中...</div>
         <input id="tripTitleInput" class="header-title edit-mode" style="display:none;" onblur="saveTripTitle()" onkeydown="if(event.key==='Enter')this.blur()">
       </div>
       <div class="header-icons">
-        <div class="sync-badge"><div class="sync-dot"></div>已同步</div>
+        <div class="sync-badge"><div class="sync-dot"></div><span id="syncStatus">同步中</span></div>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </div>
     </div>
     <div class="header-date-row">
-      <span id="tripDateDisplay" class="header-date" onclick="editTripDate()"></span>
+      <span id="tripDateDisplay" class="header-date" onclick="editTripDate()">...</span>
       <input id="tripDateInput" class="header-date edit-mode" style="display:none;" onblur="saveTripDate()" onkeydown="if(event.key==='Enter')this.blur()">
     </div>
   </div>
 
-  <!-- Weather Card -->
   <div class="weather-card" id="weatherCard"></div>
 
-  <!-- Day Tabs -->
   <div class="day-tabs-wrap">
     <div class="day-tabs" id="dayTabs"></div>
   </div>
 
-  <!-- Day Edit Bar -->
   <div class="day-edit-bar" id="dayEditBar"></div>
 
-  <!-- Lock Bar -->
   <div class="lock-bar">
     <div class="lock-left">
       <svg id="lockIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -182,13 +177,10 @@
     </div>
   </div>
 
-  <!-- Timeline -->
   <div class="timeline" id="timeline"></div>
 
-  <!-- FAB -->
   <button class="fab" id="fab" onclick="addItem()">+</button>
 
-  <!-- Bottom Nav -->
   <div class="bottom-nav">
     <div class="nav-item active">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -210,6 +202,9 @@
 </div>
 
 <script>
+// --- API 設定 ---
+const API_URL = "https://script.google.com/macros/s/AKfycbz9xWsHCmg5h09CL2t-Bs9HFn6cSREggFYe9GY82bv7IDjLyqBHkjaau5neGJo5DX20IA/exec"; 
+
 const DOT_COLORS = ['dot-blue','dot-orange','dot-red','dot-purple','dot-green'];
 const DEFAULT_DATA = {
   title: '日本岡山廣島親子自駕行',
@@ -234,34 +229,74 @@ const DEFAULT_DATA = {
         {time:'16:30',name:'廣島和平紀念資料館',dot:'dot-orange',note:'參觀約1.5小時，建議帶紙巾',map:'廣島和平紀念資料館'},
         {time:'18:00',name:'廣島原爆圓頂',dot:'dot-red',note:'免費參觀，約半小時',map:'原子彈爆炸圓頂屋'},
       ]},
-    { day:3, date:'4/22', city:'宮島', weather:{icon:'🌤️',desc:'多雲偶晴',high:21,low:14,rain:35,wind:'18:37',outfit:'薄長袖＋防風外套'},
-      items:[
-        {time:'08:40',name:'廣島車站 出發',dot:'dot-blue',note:'搭JR山陽本線至宮島口，車程約26分鐘',map:'廣島車站'},
-        {time:'09:10',name:'宮島口站 抵達',dot:'dot-orange',note:'出站後步行至渡輪乘船口',map:'宮島口駅'},
-        {time:'10:10',name:'宮島碼頭',dot:'dot-blue',note:'JR Pass可免費乘船，約10分鐘',map:'宮島フェリー乗り場'},
-        {time:'10:20',name:'嚴島神社',dot:'dot-red',note:'世界遺產，門票¥300',map:'嚴島神社'},
-        {time:'11:40',name:'宮島水族館',dot:'dot-blue',note:'親子必去！入場費大人¥1,420',map:'宮島水族館'},
-        {time:'13:20',name:'BEAMS JAPAN 宮島',dot:'dot-purple',note:'宮島限定商品',map:'BEAMS JAPAN 宮島'},
-        {time:'14:00',name:'宮島表參道商店街',dot:'dot-orange',note:'必吃紅葉饅頭和牡蠣',map:'宮島表参道商店街'},
-      ]},
   ]
 };
 
 let data, currentDay = 0, editMode = false;
+let sessionPassword = ""; 
+let saveTimeout; 
 
-function load() {
-  const saved = localStorage.getItem('travelData');
-  data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+// --- 雲端載入邏輯 ---
+async function load() {
+  try {
+    const res = await fetch(API_URL);
+    const text = await res.text();
+    // 檢查雲端資料庫是不是空的
+    if (text && text !== "{}") {
+      data = JSON.parse(text);
+      localStorage.setItem('travelData', JSON.stringify(data)); 
+      document.getElementById('syncStatus').textContent = "雲端已載入";
+    } else {
+      // 雲端如果沒有資料，載入預設資料並幫忙上傳一份
+      data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      document.getElementById('syncStatus').textContent = "初次載入";
+    }
+  } catch (e) {
+    console.error("雲端載入失敗，使用本地快取", e);
+    const saved = localStorage.getItem('travelData');
+    data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+    document.getElementById('syncStatus').textContent = "離線模式";
+    document.querySelector('.sync-dot').style.background = '#c0392b';
+  }
+  renderHeader();
+  switchDay(0);
 }
+
+// --- 雲端寫入邏輯 ---
 function save() {
   localStorage.setItem('travelData', JSON.stringify(data));
   const hint = document.getElementById('saveHint');
+  hint.textContent = '⏳ 同步中...';
+  hint.style.color = 'var(--dot-orange)';
   hint.style.display = 'inline';
-  clearTimeout(hint._t);
-  hint._t = setTimeout(() => hint.style.display = 'none', 2000);
+
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(async () => {
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ password: sessionPassword, data: data })
+      });
+      const result = await res.json();
+      
+      if (result.status === 'success') {
+        hint.textContent = '✓ 已儲存雲端';
+        hint.style.color = 'var(--green-mid)';
+      } else {
+        hint.textContent = '❌ ' + result.message;
+        hint.style.color = '#c0392b';
+        if(editMode) toggleEditMode(); 
+      }
+    } catch(e) {
+      hint.textContent = '❌ 連線失敗(存於本機)';
+      hint.style.color = '#c0392b';
+    }
+    setTimeout(() => { if(!editMode) hint.style.display = 'none'; }, 3000);
+  }, 1500); 
 }
 
-/* ── Header editing ── */
+/* ── UI 與切換邏輯 ── */
 function renderHeader() {
   document.getElementById('tripTitleDisplay').textContent = data.title;
   document.getElementById('tripDateDisplay').textContent = data.dateRange;
@@ -298,15 +333,28 @@ function saveTripDate() {
   renderHeader(); save();
 }
 
-/* ── Edit mode toggle ── */
 function toggleEditMode() {
-  editMode = !editMode;
+  const hint = document.getElementById('saveHint');
+  
+  if (!editMode) {
+    if (!sessionPassword) {
+      const pwd = prompt("請輸入編輯密碼：\n(若未設定請輸入您在 Apps Script 中綁定的密碼)");
+      if (!pwd) return; 
+      sessionPassword = pwd;
+    }
+    editMode = true;
+  } else {
+    editMode = false;
+    hint.style.display = 'none';
+  }
+
   const btn = document.getElementById('unlockBtn');
   const txt = document.getElementById('lockText');
   const icon = document.getElementById('lockIcon');
   const fab = document.getElementById('fab');
   const addDayTab = document.getElementById('addDayTab');
   const dayEditBar = document.getElementById('dayEditBar');
+  
   if (editMode) {
     btn.classList.add('active'); btn.textContent = '🔒 鎖定';
     txt.textContent = '編輯模式 — 點擊可修改';
@@ -314,6 +362,9 @@ function toggleEditMode() {
     fab.classList.add('show');
     if (addDayTab) addDayTab.style.display = 'flex';
     dayEditBar.classList.add('show');
+    hint.textContent = '🖊️ 編輯中';
+    hint.style.color = 'var(--text-secondary)';
+    hint.style.display = 'inline';
   } else {
     btn.classList.remove('active');
     btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 解鎖編輯';
@@ -327,7 +378,6 @@ function toggleEditMode() {
   buildDayEditBar();
 }
 
-/* ── Weather ── */
 function buildWeather(day) {
   const w = day.weather;
   document.getElementById('weatherCard').innerHTML = `
@@ -368,7 +418,6 @@ function parseTemp(di, val) {
   save();
 }
 
-/* ── Tabs ── */
 function buildTabs() {
   const c = document.getElementById('dayTabs');
   c.innerHTML = data.days.map((d,i) => `
@@ -378,7 +427,6 @@ function buildTabs() {
     </div>`).join('') + `<div class="add-day-tab" id="addDayTab" onclick="addDay()" style="display:${editMode?'flex':'none'};align-items:center;">+</div>`;
 }
 
-/* ── Day edit bar ── */
 function buildDayEditBar() {
   const bar = document.getElementById('dayEditBar');
   if (!editMode) { bar.classList.remove('show'); return; }
@@ -392,7 +440,6 @@ function buildDayEditBar() {
     <button class="day-del-btn" onclick="deleteDay(${currentDay})">刪除此天</button>`;
 }
 
-/* ── Timeline ── */
 function buildTimeline(day) {
   const tl = document.getElementById('timeline');
   tl.innerHTML = day.items.map((item, idx) => `
@@ -453,7 +500,6 @@ function toggleDetail(card, idx) {
   chevron.classList.toggle('open', !isOpen);
 }
 
-/* ── Data mutations ── */
 function updateItem(idx, key, val) {
   data.days[currentDay].items[idx][key] = val;
   save();
@@ -493,7 +539,6 @@ function deleteDay(idx) {
   save(); switchDay(currentDay);
 }
 
-/* ── Navigation ── */
 function switchDay(idx) {
   currentDay = idx;
   buildWeather(data.days[idx]);
@@ -503,10 +548,7 @@ function switchDay(idx) {
   document.getElementById('timeline').scrollTop = 0;
 }
 
-/* ── Init ── */
 load();
-renderHeader();
-switchDay(0);
 </script>
 </body>
 </html>
