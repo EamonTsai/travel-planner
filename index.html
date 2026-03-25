@@ -544,6 +544,193 @@
     border: 2px solid transparent;
   }
   .dot-pick.selected { border-color: #333; }
+
+  /* ── Page Panels ── */
+  .page-panel {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 14px 110px;
+    scrollbar-width: none;
+  }
+  .page-panel::-webkit-scrollbar { display: none; }
+  .page-panel.active { display: block; }
+
+  /* ── Transport Page ── */
+  .pass-banner {
+    background: linear-gradient(135deg, #3d6b4f 0%, #5a8c6a 100%);
+    border-radius: 18px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    color: white;
+    box-shadow: 0 4px 14px rgba(61,107,79,0.30);
+  }
+  .pass-banner-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+  }
+  .pass-banner-sub {
+    font-size: 13px;
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+  .pass-price {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    border-radius: 8px;
+    padding: 3px 10px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+  .transport-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .transport-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .transport-icon {
+    font-size: 22px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .transport-icon.blue   { background: #e8f0fb; }
+  .transport-icon.orange { background: #fef3e2; }
+  .transport-icon.green  { background: var(--green-light); }
+  .transport-icon.red    { background: #fde8e8; }
+  .transport-info { flex: 1; }
+  .transport-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+  .transport-route {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .transport-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-free { background: #e2f0e7; color: var(--green-dark); }
+  .badge-pay  { background: #fef3e2; color: #b05a00; }
+  .transport-detail {
+    display: none;
+    padding: 0 14px 13px;
+    border-top: 1px solid var(--border);
+  }
+  .transport-detail.show { display: block; }
+  .transport-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .transport-row:last-child { border-bottom: none; }
+  .transport-row-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    width: 42px;
+    flex-shrink: 0;
+  }
+  .transport-row-val {
+    font-size: 13px;
+    color: var(--text-primary);
+    flex: 1;
+    line-height: 1.5;
+  }
+  .transport-note {
+    font-size: 12px;
+    color: var(--dot-orange);
+    font-weight: 600;
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: #fef9f0;
+    border-radius: 8px;
+    line-height: 1.5;
+  }
+
+  /* ── Food Page ── */
+  .food-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 16px 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--green-light);
+  }
+  .food-section-title:first-child { margin-top: 0; }
+  .food-section-badge {
+    font-size: 11px;
+    background: var(--green-light);
+    color: var(--green-dark);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+  .food-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .food-type-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .food-type-main   { background: #fde8e8; color: #c0392b; }
+  .food-type-snack  { background: #fef3e2; color: #b05a00; }
+  .food-info { flex: 1; }
+  .food-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+    line-height: 1.4;
+  }
+  .food-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
 </style>
 </head>
 <body>
@@ -598,32 +785,38 @@
     </div>
   </div>
 
-  <!-- Timeline -->
-  <div class="timeline" id="timeline"></div>
+  <!-- Timeline (行程頁) -->
+  <div class="timeline page-panel active" id="timeline"></div>
+
+  <!-- 交通頁 -->
+  <div class="page-panel" id="page-transport"></div>
+
+  <!-- 美食頁 -->
+  <div class="page-panel" id="page-food"></div>
 
   <!-- FAB -->
   <button class="fab" id="fab" onclick="addItem()">+</button>
 
   <!-- Bottom Nav -->
   <div class="bottom-nav">
-    <div class="nav-item active">
+    <div class="nav-item active" id="nav-itinerary" onclick="switchPage('itinerary')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       <span>行程</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" id="nav-transport" onclick="switchPage('transport')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16,8 20,8 23,13 23,16 16,16"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span>交通</span>
+    </div>
+    <div class="nav-item" id="nav-food" onclick="switchPage('food')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      <span>美食</span>
+    </div>
+    <div class="nav-item" id="nav-map" onclick="switchPage('map')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       <span>地圖</span>
     </div>
-    <div class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      <span>備忘</span>
-    </div>
-    <div class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      <span>成員</span>
-    </div>
-    <div class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <div class="nav-item" id="nav-budget" onclick="switchPage('budget')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       <span>預算</span>
     </div>
   </div>
@@ -1148,7 +1341,115 @@ function switchDay(idx) {
   document.getElementById('timeline').scrollTop = 0;
 }
 
+// ── 頁面切換 ──
+let currentPage = 'itinerary';
+function switchPage(page) {
+  currentPage = page;
+  document.getElementById('timeline').classList.toggle('active', page === 'itinerary');
+  document.getElementById('page-transport').classList.toggle('active', page === 'transport');
+  document.getElementById('page-food').classList.toggle('active', page === 'food');
+  ['itinerary','transport','food','map','budget'].forEach(p => {
+    const el = document.getElementById('nav-' + p);
+    if (el) el.classList.toggle('active', p === page);
+  });
+  const showItinerary = page === 'itinerary';
+  document.getElementById('weatherCard').style.display = showItinerary ? '' : 'none';
+  document.querySelector('.day-tabs-wrap').style.display = showItinerary ? '' : 'none';
+  document.querySelector('.lock-bar').style.display = showItinerary ? '' : 'none';
+  const fab = document.getElementById('fab');
+  if (fab) fab.style.display = (showItinerary && editMode) ? 'flex' : 'none';
+}
+
+// ── 交通資料 ──
+const TRANSPORT_DATA = [
+  { icon:'✈️', iconColor:'blue',  title:'機場 ↔ 岡山站',              route:'岡山機場利木津巴士',                                            badge:'badge-pay',  badgeText:'需自費',    time:'約 30 分鐘',             cost:'單程 780 日圓（需自費）',            detail:'岡山機場利木津巴士直達岡山站，班次固定，無需預約。',  note:'' },
+  { icon:'🚅', iconColor:'blue',  title:'岡山 ↔ 廣島 (D1 & D4)',      route:'山陽新幹線 Nozomi 或 Sakura',                                   badge:'badge-free', badgeText:'PASS免費',  time:'約 40 分鐘',             cost:'單程約 6,350 日圓 → PASS免費',      detail:'搭乘山陽新幹線 Nozomi 或 Sakura，持 JR 周遊券可免費搭乘。', note:'' },
+  { icon:'🚗', iconColor:'orange',title:'廣島 → 馬自達博物館 (D2)',    route:'JR山陽本線至「向洋站」出站步行5分',                             badge:'badge-free', badgeText:'PASS免費',  time:'車程 5 分鐘',            cost:'單程 160 日圓 → PASS免費',          detail:'搭 JR 山陽本線至「向洋站」，出站後步行約 5 分鐘即可抵達馬自達博物館。', note:'' },
+  { icon:'⛩️', iconColor:'red',   title:'廣島 → 宮島 (D3)',            route:'JR山陽本線至「宮島口」→ 轉 JR 渡輪',                          badge:'badge-free', badgeText:'PASS免費',  time:'電車28分 + 渡輪10分',    cost:'電車420+船180 → PASS免費',          detail:'搭 JR 山陽本線至「宮島口站」，轉乘 JR 渡輪過海到宮島，持周遊券全程免費。', note:'⚠️ 上島需另現場支付「宮島訪問稅」100日圓（現金）。' },
+  { icon:'🐈', iconColor:'orange',title:'廣島 → 尾道 → 岡山 (D4)',    route:'新幹線三原→JR尾道→JR福山→新幹線岡山',                         badge:'badge-free', badgeText:'PASS免費',  time:'前半約40分 + 後半約40分',cost:'合計約 6,800 日圓 → PASS免費',      detail:'前半：新幹線至「三原站」轉 JR 普通車至「尾道」約40分。後半：JR普通車至「福山站」轉新幹線至「岡山」約40分。', note:'' },
+  { icon:'🛶', iconColor:'green', title:'岡山 ↔ 倉敷 (D5)',            route:'JR山陽本線或伯備線',                                           badge:'badge-free', badgeText:'PASS免費',  time:'約 15 分鐘',             cost:'單程 330 日圓 → PASS免費',          detail:'從岡山站搭 JR 山陽本線或伯備線，約 15 分鐘即達倉敷站。', note:'' }
+];
+
+function buildTransport() {
+  const el = document.getElementById('page-transport');
+  el.innerHTML = `
+    <div class="pass-banner">
+      <div class="pass-banner-title">🎫 推薦神票：JR 關西廣島地區鐵路周遊券 (5日)</div>
+      <div class="pass-banner-sub">涵蓋所有 JR 新幹線（含 Nozomi）、JR 普通車及宮島渡輪<br>D1～D5 使用，完美攻略全程交通。D6 在岡山僅需自費短程巴士。</div>
+      <div class="pass-price">¥17,000 日圓</div>
+    </div>
+    ${TRANSPORT_DATA.map((t, i) => `
+      <div class="transport-card">
+        <div class="transport-card-header" onclick="toggleTransport(${i})">
+          <div class="transport-icon ${t.iconColor}">${t.icon}</div>
+          <div class="transport-info">
+            <div class="transport-title">${t.title}</div>
+            <div class="transport-route">${t.route}</div>
+          </div>
+          <span class="transport-badge ${t.badge}">${t.badgeText}</span>
+        </div>
+        <div class="transport-detail" id="td-${i}">
+          <div class="transport-row"><div class="transport-row-label">⏱ 時間</div><div class="transport-row-val">${t.time}</div></div>
+          <div class="transport-row"><div class="transport-row-label">💴 費用</div><div class="transport-row-val">${t.cost}</div></div>
+          <div class="transport-row"><div class="transport-row-label">📋 說明</div><div class="transport-row-val">${t.detail}</div></div>
+          ${t.note ? `<div class="transport-note">${t.note}</div>` : ''}
+        </div>
+      </div>`).join('')}`;
+}
+function toggleTransport(i) {
+  document.getElementById('td-' + i).classList.toggle('show');
+}
+
+// ── 美食資料 ──
+const FOOD_DATA = [
+  { section:'廣島市區 (D1–D2)', day:'D1-D2', items:[
+    { type:'main',  name:'電光石火 / 麗ちゃん（廣島燒）',   desc:'位於車站 ekie，必吃圓頂狀層次廣島燒，鮮美多汁。' },
+    { type:'main',  name:'ばくだん屋（廣島沾麵）',           desc:'清爽冷麵沾上特製辣味芝麻醬，夏天吃極佳。' },
+    { type:'snack', name:'八天堂 奶油麵包',                  desc:'廣島站內販售，入口即化的冰涼甜點。' },
+    { type:'snack', name:'球場限定美食',                     desc:'看球必買「鯉魚烏龍麵」或球員便當，氣氛滿分。' }
+  ]},
+  { section:'宮島 (D3)', day:'D3', items:[
+    { type:'main',  name:'牡蠣屋',                           desc:'極具質感的名店，推薦「牡蠣屋定食」（含烤、炸、醃製牡蠣）。' },
+    { type:'main',  name:'上野商店（穴子飯）',               desc:'位於宮島口，炭烤星鰻飯香氣四溢，也可買便當上島吃。' },
+    { type:'snack', name:'紅葉堂（炸紅葉饅頭）',            desc:'外酥內軟，起司與紅豆口味最受歡迎。' },
+    { type:'snack', name:'BIG SET 牡蠣咖哩麵包',             desc:'表參道商店街內，整顆大牡蠣包在咖哩麵包中。' },
+    { type:'snack', name:'三遊姫（宮島牛舌包）',             desc:'熱騰騰的包子，適合邊走邊吃。' }
+  ]},
+  { section:'尾道 (D4)', day:'D4', items:[
+    { type:'main',  name:'一丁 或 壹番館（尾道拉麵）',      desc:'清甜醬油湯底加上大塊豬背脂，懷舊美味。' },
+    { type:'main',  name:'村上（尾道燒）',                   desc:'加入砂囊（雞胗）的特色御好燒，口感獨特。' },
+    { type:'snack', name:'おやつとやまねこ（尾道布丁）',    desc:'裝在復古玻璃瓶內，附上檸檬糖漿的超人氣布丁。' },
+    { type:'snack', name:'瀨戶內檸檬果汁/冰淇淋',           desc:'商店街隨處可見，解渴消暑首選。' }
+  ]},
+  { section:'倉敷與岡山 (D5–D6)', day:'D5-D6', items:[
+    { type:'main',  name:'三宅商店（倉敷）',                 desc:'町家老屋改建，招牌是微辣的町家咖哩飯。' },
+    { type:'main',  name:'吾妻壽司（岡山站）',              desc:'必吃「岡山散壽司」，鋪滿瀨戶內海特產鰆魚與海鮮。' },
+    { type:'main',  name:'味司野村（岡山）',                 desc:'在地特色美食「多明格拉斯醬豬排飯」（デミカツ丼）。' },
+    { type:'snack', name:'有鄰庵（倉敷）',                   desc:'每日限量的「微笑布丁」與生雞蛋拌飯。' },
+    { type:'snack', name:'白桃/麝香葡萄水果聖代',           desc:'岡山號稱水果王國，可在倉敷或岡山站周邊甜點店享用。' }
+  ]}
+];
+
+function buildFood() {
+  const el = document.getElementById('page-food');
+  el.innerHTML = FOOD_DATA.map(sec => `
+    <div class="food-section-title">
+      <span>${sec.section}</span>
+      <span class="food-section-badge">${sec.day}</span>
+    </div>
+    ${sec.items.map(item => `
+      <div class="food-card">
+        <span class="food-type-badge ${item.type === 'main' ? 'food-type-main' : 'food-type-snack'}">${item.type === 'main' ? '正餐' : '小吃'}</span>
+        <div class="food-info">
+          <div class="food-name">${item.name}</div>
+          <div class="food-desc">${item.desc}</div>
+        </div>
+      </div>`).join('')}`).join('');
+}
+
 load();
+buildTransport();
+buildFood();
 </script>
 </body>
 </html>
